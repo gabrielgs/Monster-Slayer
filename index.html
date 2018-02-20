@@ -6,6 +6,55 @@
   <script src="https://npmcdn.com/vue/dist/vue.js"></script>
   <link rel="stylesheet" href="css/foundation.min.css">
   <link rel="stylesheet" href="css/app.css">
+  <style>
+    .bounceIn {
+      animation-name: bounceIn;
+      animation-duration: 0.75s;
+    }
+
+    .turn-enter {
+      opacity: 0;
+      transform: scale3d(0, 0, 0);
+    }
+
+    @keyframes bounceIn {
+      from,
+      20%,
+      40%,
+      60%,
+      80%,
+      to {
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      0% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+      }
+
+      20% {
+        transform: scale3d(1.1, 1.1, 1.1);
+      }
+
+      40% {
+        transform: scale3d(0.9, 0.9, 0.9);
+      }
+
+      60% {
+        opacity: 1;
+        transform: scale3d(1.03, 1.03, 1.03);
+      }
+
+      80% {
+        transform: scale3d(0.97, 0.97, 0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="app">
@@ -44,13 +93,17 @@
         <button id="give-up" @click="giveUp">GIVE UP</button>
       </div>
     </section>
-    <section class="row log" v-if="turns.length > 0">
+    <section class="row log" v-show="turns.length > 0">
       <div class="small-12 columns">
         <ul>
-          <li v-for="turn in turns"
-            :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">
-            {{turn.text}}
-          </li>
+          <transition-group name="turn"
+            enter-active-class="bounceIn">
+            <li v-for="turn in turns"
+              :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}"
+              :key="turn.id">
+              {{turn.text}}
+            </li>
+          </transition-group>
         </ul>
       </div>
     </section>
